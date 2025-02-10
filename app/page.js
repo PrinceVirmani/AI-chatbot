@@ -2,17 +2,24 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { Send } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useChat } from "ai/react";
 
 export default function Home() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
   const messagesEndRef = useRef(null);
+  const [selectedModel, setSelectedModel] = useState("openai");
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -26,8 +33,18 @@ export default function Home() {
     <div className="flex flex-col h-screen w-full">
       <div className="flex flex-col items-center w-full max-w-4xl mx-auto h-full">
         <header className="w-full py-6 mb-4">
-          <div className="flex h-14 items-center text-3xl justify-center">
-            AI CHATBOT
+          <div className="flex h-10 items-center text-3xl justify-between">
+            <div>AI CHATBOT</div>
+            <Select value={selectedModel} onValueChange={setSelectedModel}>
+              <SelectTrigger className="w-40 mr-8">
+                <SelectValue placeholder="Select Model" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="openai">OpenAI</SelectItem>
+                <SelectItem value="gemini">Gemini</SelectItem>
+                <SelectItem value="claude">Claude AI</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </header>
         <div className="flex-1 w-full overflow-y-auto p-4 space-y-4 mb-20">
